@@ -1,3 +1,4 @@
+
 'use strict';
 /** @type {import('DataTypes-cli').Migration} */
 module.exports = {
@@ -12,6 +13,18 @@ module.exports = {
       uuid: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4
+      },
+      published:{
+        type: DataTypes.BOOLEAN, 
+        defaultValue:false 
+      },
+      phone: {
+        type: DataTypes.STRING, 
+        allowNull:false 
+      },
+      address:{
+        type: DataTypes.STRING, 
+        allowNull:false 
       },
       categoryId: {
         type: DataTypes.INTEGER,

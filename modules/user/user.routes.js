@@ -12,7 +12,7 @@ const { registerUser,  loginUser,  deleteUser, updateUser,  getHash, pushSMS,
     getUsers,
     getEnterprenuers} = require("./user.controller");
 
-router.post("/register", registerUser)
+router.post("/register",upload.single('file'), registerUser)
 router.post("/message",validateJWT,sendMessage)
 router.post("/sms",validateJWT,pushSMS)
 router.post("/reset-password",sendPasswordLink)

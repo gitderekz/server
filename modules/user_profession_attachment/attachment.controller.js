@@ -8,15 +8,13 @@ const createAttachment = async(req,res)=>{
     try {
         const user_profession_uuid = req.params.uuid;
         let link = await getUrl(req);
-        const{ title } = req.body
         const userProfession = await UserProfession.findOne({
             where:{
-                user_profession_uuid
+               uuid:user_profession_uuid
             }
         })
         
         const response = await UserProfessionAttachment.create({
-            title,
             link,
             userProfessionId:userProfession.id
         })

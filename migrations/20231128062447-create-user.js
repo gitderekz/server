@@ -19,7 +19,7 @@ module.exports = {
       },
       phone:{
         type: DataTypes.STRING, 
-        allowNull:false 
+        allowNull:true 
       },
       name: {
         type: DataTypes.STRING, 
@@ -31,8 +31,8 @@ module.exports = {
       },
       role: {
         type: DataTypes.STRING, 
-        defaultValue:"tech",
-        allowNull:false  
+        defaultValue:"client",
+    
       },
       password: {
         type: DataTypes.STRING, 
