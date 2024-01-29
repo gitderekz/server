@@ -11,7 +11,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Category.belongsTo(models.UserProfession)
     }
   }
   Category.init({
@@ -23,6 +22,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull:false
       },
+      icon:{
+        type:DataTypes.TEXT,
+        allowNull:false
+      }
   }, {
     sequelize,
     modelName: 'Category',

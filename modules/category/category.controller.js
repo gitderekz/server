@@ -6,10 +6,12 @@ const {Category,Business} = require("../../models");
 const createCategory = async(req,res)=>{
 try {
     const {
-        name
+        name,
+        icon
     } = req.body;
     const response = await Category.create({
         name,
+        icon
     })
     successResponse(res,response)
 } catch (error) {
@@ -54,14 +56,10 @@ const updateCategory = async(req,res)=>{
         }
     
 const getCategories = async(req,res)=>{
-    try {
-        const uuid = req.params.uuid;
-        const business = await Business.findOne({
-            uuid
-        })
+    try { 
         const response = await Category.findAll({
+            order:[["name","ASC"]]
         })
-        
         successResponse(res,response)
     } catch (error) {
         errorResponse(res,error)

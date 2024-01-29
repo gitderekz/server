@@ -11,10 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      UserProfession.hasMany(models.UserProfessionAttachment, { onDelete: 'cascade'})
-      UserProfession.hasMany(models.UserProfessionReferee, { onDelete: 'cascade'})
-      UserProfession.hasOne(models.UserSubscription, { onDelete: 'cascade'})
-      UserProfession.hasOne(models.Category, { onDelete: 'cascade'})
+      // UserProfession.hasMany(models.UserProfessionAttachment, { onDelete: 'cascade'})
+      // UserProfession.hasMany(models.UserProfessionReferee, { onDelete: 'cascade'})
+      // UserProfession.hasOne(models.UserSubscription, { onDelete: 'cascade'})
+      UserProfession.belongsTo(models.User)
     }
   }
   UserProfession.init({
@@ -30,6 +30,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER, 
         allowNull:false  
       },
+      phone: {
+        type: DataTypes.STRING, 
+        allowNull:false 
+      },
+      address:{
+        type: DataTypes.STRING, 
+        allowNull:false 
+      },
       title: {
         type: DataTypes.STRING, 
         allowNull:false 
@@ -41,6 +49,10 @@ module.exports = (sequelize, DataTypes) => {
       startingPrice: {
         type: DataTypes.STRING, 
         allowNull:false 
+      },
+      published:{
+        type: DataTypes.BOOLEAN, 
+        defaultValue:false 
       },
       backgroundImage: {
         type: DataTypes.STRING, 

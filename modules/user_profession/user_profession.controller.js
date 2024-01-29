@@ -1,27 +1,30 @@
 const { errorResponse, successResponse } = require("../../utils/responses")
 const getUrl = require("../../utils/cloudinary_upload");
-const {UserProfession,User,Sequelize,ProgramRequirement,UserProfessionDocument} = require("../../models");
+const {UserProfession,User,Category} = require("../../models");
 const { sendEmail } = require("../../utils/send_email");
 const { where } = require("sequelize");
 
 const createUserProfession = async(req,res)=>{
     try {
         const user = req.user
-        let link = null;
-        let {categoryId,title,startingPrice,backgroundImage,videoLink,description} = req.body
-        // const program = await Program.findOne({
-        //     where:{uuid:program_uuid}
-        // })
         
+        let {category_uuid,title,phone,address,startingPrice,description} = req.body
+       let backgroundImage
         if (req.file) {
             backgroundImage = await getUrl(req);
         }
+        const category = await Category.findOne({
+            where:{
+                uuid:category_uuid
+            }
+        })
         const response = await UserProfession.create({
             userId:user.id,
             title:title,
-            categoryId,
+            phone,
+            address,
+            categoryId:category.id,
             startingPrice,
-            videoLink,
             description,
             backgroundImage:backgroundImage,
         })
@@ -83,10 +86,27 @@ const getUserUserProfession = async(req,res)=>{
             offset: offset, //ruka ngapi
             limit: limit, //leta ngapi
             order:[['createdAt','DESC']],
+            include:[User],
             where:{userId:user.id},
         })
         const totalPages = (count%limit)>0?parseInt(count/limit)+1:parseInt(count/limit)
         successResponse(res, {count, data:rows, page, totalPages})
+    } catch (error) {
+        errorResponse(res,error)
+    }
+}
+
+const getUserProfessionDetails = async(req,res)=>{
+    try {
+       const uuid = req.params.uuid;
+        const response = await UserProfession.findOne({
+           where:{
+            uuid
+           },
+           include:[User]
+        })
+       
+        successResponse(res, response)
     } catch (error) {
         errorResponse(res,error)
     }
@@ -144,9 +164,7 @@ const getAllUserProfessions = async(req, res) =>{
         const {count, rows} = await UserProfession.findAndCountAll({
             offset: offset, //ruka ngapi
             limit: limit, //leta ngapi
-            order:[['createdAt','DESC']],
-            // distinct:true,
-
+            include:[User]
         })
         const totalPages = (count%limit)>0?parseInt(count/limit)+1:parseInt(count/limit)
         successResponse(res, {count, data:rows, page, totalPages})
@@ -197,7 +215,7 @@ const getDocumentUserProfessions = async(req, res) =>{
 
 
 module.exports = {
-    createUserProfession,updateUserProfession,deleteUserProfession,getUserUserProfession,getAllUserProfessions,
+    createUserProfession,updateUserProfession,deleteUserProfession,getUserProfessionDetails, getUserUserProfession,getAllUserProfessions,
     getVideoUserProfessions,getDocumentUserProfessions,postUserProfessionDocument,
     
 }

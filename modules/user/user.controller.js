@@ -135,17 +135,16 @@ const pushSMS = async(req,res)=>{
 }
 const registerUser = async (req, res) => {
     try {
-      const {
+      let {
         name,
         email,
-        phone,
         password,
-        role
+        image
       } = req.body;
-      
-
-
-    
+     
+      if(req.file){
+         image = await getUrl(req)
+      }
       const user = await User.findOne({ where: { email } });
       if (user) {
         res.status(403).json({
@@ -156,13 +155,12 @@ const registerUser = async (req, res) => {
         const hashedPassword = bcrypt.hashSync(password, 10);
         const user = await User.create({
           name,
-          phone,
           email,
           password: hashedPassword,
-          role
+          image
         }); 
-        admin = await User.findOne({ where: { role:'Admin' } });
-        sendEmail(req, res, admin, 'registration')
+        admin = await User.findOne({where:{role:'Admin'}});
+        // sendEmail(req, res, admin, 'registration')
         const response = await User.findOne({
           where: {
             email: email
@@ -286,7 +284,6 @@ const loginUser = async (req, res) => {
           where: {
             email: email
           },
-          include:[Business]
         });
         const tokens = generateJwtTokens(response)
           res.status(200).json({
@@ -491,16 +488,7 @@ const getMyDetails = async(req,res)=>{
   const user = req.user
   try {
       const response = await User.findOne({
-        where:{id:user.id},
-        include:[
-          Business,
-          {
-            model: InvestorProfile,
-            include:{
-              model: BusinessSector
-            }
-          }
-        ]
+        where:{id:user.id}
       })
       successResponse(res,response)
   } catch (error) {

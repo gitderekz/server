@@ -6,12 +6,14 @@ getVideoUserProfessions,getDocumentUserProfessions,getRejectedUserProfessions,ge
 
 const router = Router()
 router.post("/",upload.single('file'),validateJWT,createUserProfession)
+
 router.post("/document/:uuid",upload.single('file'),validateJWT,postUserProfessionDocument)
 router.get('/user',validateJWT,getUserUserProfession)
+router.get("/:uuid",getUserProfessionDetails)
 // business UUID
 // ret reviewers,status()
 
-router.get('/',validateJWT,getAllUserProfessions)
+router.get('/',getAllUserProfessions)
 router.get('/video',validateJWT,getVideoUserProfessions)
 router.get('/document',validateJWT,getDocumentUserProfessions)
 
